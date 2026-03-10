@@ -67,7 +67,7 @@ export class SidebarComponent {
 
   get sidebarClasses(): string {
     const baseClasses =
-      'fixed top-0 left-0 flex flex-col h-screen bg-white border-r border-realty-gray-200 shadow-xl transition-all duration-300 ease-in-out z-50';
+      'fixed top-0 left-0 flex flex-col h-[100dvh] bg-white border-r border-realty-gray-200 shadow-xl transition-all duration-300 ease-in-out z-50';
     const widthClass = this.isCollapsed ? 'w-20' : 'w-64';
     return `${baseClasses} ${widthClass}`;
   }

@@ -134,7 +134,7 @@ aside {
 @media (max-width: 768px) {
   aside {
     position: fixed !important;
-    height: 100vh;
+    height: 100dvh;
     transition:
       width 300ms cubic-bezier(0.4, 0, 0.2, 1),
       transform 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;

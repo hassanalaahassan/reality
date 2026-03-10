@@ -37,10 +37,17 @@ export class PropertiesService {
   }
 
   // Add the property object to 'properties' table
-  addProperty(property:PropertyForm): Observable<Property> {
-    return this.supabase.insert<PropertyForm>(
-      'properties',
-      property,
+  addProperty(property: PropertyForm): Observable<Property> {
+    return this.supabase.insert<PropertyForm>('properties', property);
+  }
+
+  // Fetch all properties from the 'properties' table
+  getProperties(): Observable<Property[]> {
+    return this.supabase.getAll<any>('properties').pipe(
+      map((res: any) => {
+        if (res.error) throw res.error;
+        return res.data as Property[];
+      }),
     );
   }
 }
