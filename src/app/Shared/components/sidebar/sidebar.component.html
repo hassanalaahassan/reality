@@ -1,238 +1,179 @@
 <!-- Mobile Overlay -->
 <div
   *ngIf="layoutService.isMobile() && layoutService.isSidebarExpanded()"
-  class="fixed inset-0 bg-black/50 z-40 transition-opacity"
+  class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
   (click)="layoutService.closeMobileSidebar()"
 ></div>
 
 <!-- Sidebar Container -->
 <aside
-  class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out border-r flex flex-col bg-[var(--color-secondary)] border-[var(--color-primary)] dark:bg-[var(--color-dark)] dark:border-[var(--color-primary)]"
-  [ngClass]="layoutService.isSidebarExpanded() ? 'w-64 shadow-xl' : 'w-16'"
+  [class]="sidebarClasses"
+  [attr.aria-expanded]="!isCollapsed"
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
 >
-  <!-- Header / Logo -->
-  <div
-    class="h-16 flex items-center justify-between px-3 border-b border-[var(--color-primary)] dark:border-[var(--color-primary)]"
+  <!-- Toggle Button -->
+  <button
+    (click)="toggleSidebar()"
+    class="ripple-btn absolute left-full top-6 z-[60] -translate-x-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-realty-terracotta-500 hover:bg-realty-terracotta-600 text-white shadow-lg transition-all duration-200 hover:scale-110 active:scale-95"
   >
-    <div
-      class="flex items-center gap-3 overflow-hidden whitespace-nowrap transition-opacity duration-300"
-      [class.opacity-0]="!isSidebarExpanded()"
-      [class.w-0]="!isSidebarExpanded()"
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2.5"
+      stroke="currentColor"
+      class="w-3.5 h-3.5 transition-transform duration-300 ease-in-out"
+      [ngClass]="isCollapsed ? 'rotate-180' : 'rotate-0'"
     >
-      <!-- House SVG Icon for Logo -->
-      <svg
-        class="w-8 h-8 flex-shrink-0 text-[var(--color-dark)] dark:text-[var(--color-light)]"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5L8.25 12l7.5-7.5"
+      />
+    </svg>
+  </button>
+
+  <!-- Logo Section -->
+  <div class="mb-4 border-b border-realty-gray-200 pb-4">
+    <div class="flex items-center gap-3 px-4 pt-4">
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-realty-blue-500 flex-shrink-0"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-        />
-      </svg>
-      <span
-        class="text-xl font-bold font-sans text-[var(--color-dark)] dark:text-[var(--color-light)]"
-        >RealtyApp</span
+        <span class="text-xl font-bold text-white">🏠</span>
+      </div>
+      <!-- CSS transition instead of *ngIf -->
+      <div
+        class="sidebar-text overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out"
+        [ngClass]="
+          isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+        "
       >
+        <h2 class="text-lg font-bold text-realty-blue-800">RealtyApp</h2>
+        <p class="text-[10px] text-realty-gray-500">Real Estate Solutions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="flex-1 space-y-1 px-3 overflow-y-auto">
+    <ng-container *ngFor="let item of menuItems()">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="bg-realty-blue-50 border-r-4 border-realty-blue-500 text-realty-blue-700 active-menu"
+        [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+        (click)="setActiveItem(item.id)"
+        [class]="getMenuItemClasses(item.id)"
+        [title]="isCollapsed ? item.label : ''"
+      >
+        <span class="text-xl flex-shrink-0">{{ item.icon }}</span>
+
+        <!-- CSS transition instead of *ngIf -->
+        <span
+          class="sidebar-text ms-3 whitespace-nowrap text-sm overflow-hidden transition-all duration-300 ease-in-out"
+          [ngClass]="
+            isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+          "
+        >
+          {{ item.label }}
+        </span>
+
+        <!-- Badge with CSS transition -->
+        <span
+          *ngIf="item.badge"
+          class="ml-auto rounded-full bg-realty-terracotta-100 px-2 py-0.5 text-[10px] font-medium text-realty-terracotta-700 whitespace-nowrap transition-all duration-300 ease-in-out"
+          [ngClass]="
+            isCollapsed
+              ? 'scale-0 w-0 opacity-0 overflow-hidden'
+              : 'scale-100 opacity-100'
+          "
+        >
+          {{ item.badge }}
+        </span>
+      </a>
+    </ng-container>
+  </nav>
+
+  <!-- VIP Section (CSS transition instead of *ngIf) -->
+  <div
+    class="mx-3 p-3 rounded-lg bg-gradient-to-r from-realty-sage-50 to-realty-cream-50 border border-realty-sage-200 flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden"
+    [ngClass]="
+      isCollapsed
+        ? 'max-h-0 opacity-0 m-0 p-0 border-0'
+        : 'max-h-40 opacity-100 mt-4'
+    "
+  >
+    <div class="flex items-center gap-2 mb-2">
+      <div
+        class="flex h-8 w-8 items-center justify-center rounded-full bg-realty-sage-500 flex-shrink-0"
+      >
+        <span class="text-white text-xs">⭐</span>
+      </div>
+      <div>
+        <h3 class="font-semibold text-sm text-realty-sage-800 leading-tight">
+          VIP offers
+        </h3>
+        <p class="text-[10px] text-realty-gray-600 leading-tight mt-0.5">
+          Exclusive discounts
+        </p>
+      </div>
     </div>
     <button
-      (click)="toggleSidebar()"
-      class="p-2 rounded-lg flex-shrink-0 transition-colors text-[var(--color-accent)] hover:bg-[var(--color-primary)] hover:text-[var(--color-light)] dark:text-[var(--color-accent)] dark:hover:bg-[var(--color-primary)] dark:hover:text-[var(--color-light)]"
+      class="ripple-btn w-full bg-realty-sage-500 hover:bg-realty-sage-600 text-white text-[11px] font-medium py-1.5 rounded transition whitespace-nowrap"
     >
-      <svg
-        *ngIf="isSidebarPinned()"
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-        ></path>
-      </svg>
-      <svg
-        *ngIf="!isSidebarPinned()"
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
+      show offers
     </button>
   </div>
 
-  <!-- Navigation Links -->
-  <div class="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 space-y-2">
-    <a
-      *ngFor="let item of navItems()"
-      [routerLink]="item.route"
-      routerLinkActive="!bg-[var(--color-accent)] !text-[var(--color-light)] dark:!bg-[var(--color-accent)] dark:!text-[var(--color-light)] shadow-sm"
-      [routerLinkActiveOptions]="{ exact: item.route === '/' }"
-      class="flex items-center p-2 rounded-lg group transition-colors relative text-[var(--color-dark)] hover:bg-[var(--color-primary)] hover:text-[var(--color-light)] dark:text-[var(--color-light)] dark:hover:bg-[var(--color-primary)] dark:hover:text-[var(--color-light)]"
-      [title]="!isSidebarExpanded() ? item.label : ''"
-    >
-      <!-- Placeholder SVG icon based on item.icon -->
-      <svg
-        class="w-6 h-6 flex-shrink-0 transition-colors"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+  <!-- Logout & User Profile -->
+  <div class="mt-auto border-t border-realty-gray-200 pt-2 pb-3 flex-shrink-0">
+    <!-- Logout Button -->
+    <div class="px-3 mb-1">
+      <button
+        (click)="logout()"
+        class="ripple-btn w-full flex items-center p-2 rounded-lg text-realty-terracotta-500 hover:bg-realty-terracotta-50 transition-all duration-300 cursor-pointer"
+        [title]="isCollapsed ? 'Log out' : ''"
       >
-        <path
-          *ngIf="item.icon === 'home'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-        />
-        <path
-          *ngIf="item.icon === 'building'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-        />
-        <path
-          *ngIf="item.icon === 'map'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-        />
-        <path
-          *ngIf="item.icon === 'heart'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-        />
-        <path
-          *ngIf="item.icon === 'message'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-        />
-        <path
-          *ngIf="item.icon === 'settings'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"
-        />
-        <path
-          *ngIf="item.icon === 'plus'"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 4v16m8-8H4"
-        />
-      </svg>
-      <span
-        class="ms-3 whitespace-nowrap overflow-hidden transition-all duration-300"
-        [ngClass]="
-          isSidebarExpanded()
-            ? 'opacity-100 max-w-[200px]'
-            : 'opacity-0 max-w-0'
-        "
-      >
-        {{ item.label }}
-      </span>
-
-      <!-- Custom CSS Tooltip for collapsed state -->
-      <div
-        *ngIf="!isSidebarExpanded()"
-        class="absolute left-14 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-md bg-[var(--color-dark)] text-[var(--color-light)] dark:bg-[var(--color-secondary)] dark:text-[var(--color-dark)]"
-      >
-        {{ item.label }}
-      </div>
-    </a>
-  </div>
-
-  <!-- Footer Actions -->
-  <div
-    class="p-3 border-t border-[var(--color-primary)] dark:border-[var(--color-primary)] space-y-2"
-  >
-    <!-- Logout -->
-    <button
-      (click)="logout()"
-      class="w-full flex items-center p-2 rounded-lg group transition-colors relative text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-light)] dark:text-[var(--color-accent)] dark:hover:bg-[var(--color-accent)] dark:hover:text-[var(--color-light)]"
-    >
-      <svg
-        class="w-6 h-6 flex-shrink-0"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-        />
-      </svg>
-      <span
-        class="ms-3 whitespace-nowrap overflow-hidden transition-all duration-300"
-        [ngClass]="
-          isSidebarExpanded()
-            ? 'opacity-100 max-w-[200px]'
-            : 'opacity-0 max-w-0'
-        "
-      >
-        Log out
-      </span>
-      <div
-        *ngIf="!isSidebarExpanded()"
-        class="absolute left-14 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-md bg-[var(--color-dark)] text-[var(--color-light)] dark:bg-[var(--color-secondary)] dark:text-[var(--color-dark)]"
-      >
-        Log out
-      </div>
-    </button>
+        <span class="text-xl flex-shrink-0">🚪</span>
+        <span
+          class="sidebar-text ms-3 font-medium text-sm whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out"
+          [ngClass]="
+            isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+          "
+        >
+          Log out
+        </span>
+      </button>
+    </div>
 
     <!-- User Profile -->
     <div
-      *ngIf="user()"
-      class="flex items-center gap-3 p-2 mt-2 rounded-lg bg-[var(--color-light)]/50 dark:bg-[var(--color-primary)]/20 shadow-sm border border-[var(--color-primary)]/20"
+      class="flex items-center gap-3 px-4 py-2 border-t border-realty-gray-100 mt-1 pt-2"
     >
       <img
         [src]="
-          user()?.profile?.image_url
+          user()?.profile?.image_url ||
+          'https://api.dicebear.com/7.x/avataaars/svg?seed=Agent'
         "
-        class="w-8 h-8 rounded-full flex-shrink-0 object-cover border border-[var(--color-primary)]"
-        alt="User Avatar"
+        alt="Profile"
+        class="h-8 w-8 rounded-full border-2 border-realty-cream-300 object-cover flex-shrink-0 bg-white"
       />
       <div
-        class="flex-col overflow-hidden whitespace-nowrap transition-all duration-300"
+        class="sidebar-text overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out"
         [ngClass]="
-          isSidebarExpanded()
-            ? 'opacity-100 max-w-[200px] flex'
-            : 'opacity-0 max-w-0 hidden'
+          isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
         "
       >
-        <span
-          class="text-sm font-medium text-[var(--color-dark)] dark:text-[var(--color-light)] truncate"
+        <p
+          class="text-sm font-medium text-realty-blue-800 truncate leading-tight"
         >
-          {{ user()?.profile?.fullName }}
-        </span>
-        <span
-          class="text-xs text-[var(--color-primary)] dark:text-[var(--color-secondary)] truncate"
+          {{ user()?.profile?.fullName || "User" }}
+        </p>
+        <p
+          class="text-[10px] text-realty-gray-500 truncate leading-tight mt-0.5"
         >
           {{ user()?.auth?.email }}
-        </span>
+        </p>
       </div>
     </div>
   </div>

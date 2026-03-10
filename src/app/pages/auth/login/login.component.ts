@@ -7,6 +7,7 @@ import {
 } from '../../../Services/validation.service';
 import { LoginForm } from '../../../Models/auth';
 import { AuthService } from '../../../Services/auth.service';
+import { ToastService } from '../../../Services/toast.service';
 import { FormFieldComponent, AlertComponent } from '../../../Shared';
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   // ── Form state ──────────────────────────
   form = signal<LoginForm>({
@@ -43,7 +45,6 @@ export class LoginComponent {
 
   update<K extends keyof LoginForm>(key: K, value: LoginForm[K]) {
     this.form.update((f) => ({ ...f, [key]: value }));
-    // Clear server error when user starts typing
     if (this.serverError()) {
       this.serverError.set(null);
     }
@@ -55,10 +56,12 @@ export class LoginComponent {
 
   // ── Submit ──────────────────────────────
   onSubmit() {
-    // Mark all fields as touched so errors appear
     this.touched.set(AuthValidator.markAllTouchedLogin(this.form()));
 
-    if (!this.isFormValid()) return;
+    if (!this.isFormValid()) {
+      this.toast.error('Please fill in all fields correctly.');
+      return;
+    }
 
     this.loading.set(true);
     this.serverError.set(null);
@@ -68,7 +71,7 @@ export class LoginComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          // navigate to dashboard or home on success
+          this.toast.success('Login successful! Welcome back.');
           this.router.navigate(['/']);
         },
         error: (err) => {
@@ -77,6 +80,7 @@ export class LoginComponent {
             err?.error?.message ||
             err?.message ||
             'Login failed. Please check your credentials and try again.';
+          this.toast.error(message);
           this.serverError.set(message);
         },
         complete: () => {

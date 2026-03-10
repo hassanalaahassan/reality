@@ -8,6 +8,7 @@ import {
   TouchedState,
 } from '../../../Services/validation.service';
 import { AuthService } from '../../../Services/auth.service';
+import { ToastService } from '../../../Services/toast.service';
 import { FormFieldComponent, AlertComponent } from '../../../Shared';
 
 @Component({
@@ -20,6 +21,7 @@ export class RegisterComponent {
   private auth = inject(AuthService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   // ── Form state ──────────────────────────
   form = signal<RegisterForm>({
@@ -49,7 +51,6 @@ export class RegisterComponent {
 
   update<K extends keyof RegisterForm>(key: K, value: RegisterForm[K]) {
     this.form.update((f) => ({ ...f, [key]: value }));
-    // Clear server error when user starts typing
     if (this.serverError()) {
       this.serverError.set(null);
     }
@@ -72,10 +73,12 @@ export class RegisterComponent {
 
   // ── Submit ──────────────────────────────
   onSubmit() {
-    // Mark all fields as touched so validation errors appear
     this.touched.set(AuthValidator.markAllTouched(this.form()));
 
-    if (!this.isFormValid()) return;
+    if (!this.isFormValid()) {
+      this.toast.error('Please fix the errors in the form before submitting.');
+      return;
+    }
 
     this.loading.set(true);
     this.serverError.set(null);
@@ -86,11 +89,10 @@ export class RegisterComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.successMessage.set(
+          this.toast.success(
             'Account created successfully! Redirecting to login...',
           );
           this.resetForm();
-          // Navigate to login after a short delay
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);
@@ -101,6 +103,7 @@ export class RegisterComponent {
             err?.error?.message ||
             err?.message ||
             'Registration failed. Please try again.';
+          this.toast.error(message);
           this.serverError.set(message);
         },
         complete: () => {

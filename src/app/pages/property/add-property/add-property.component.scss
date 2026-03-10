@@ -1,125 +1,137 @@
-:root {
-  --color-primary: #8B7E74;
-  --color-secondary: #F5F0E8;
-  --color-accent: #C97C5D;
-  --color-dark: #37312C;
-  --color-light: #F9F6F0;
+/* ─── Slide-down animation for dynamic inputs ─── */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 60px;
+  }
 }
 
+.animate-slide-down {
+  animation: slideDown 0.25s ease-out forwards;
+}
 
-
-/* Card */
+/* ─── Card ─── */
 .add-property-container .card {
-  background: var(--color-light);
+  background: var(--realty-cream-50);
   border-radius: 14px;
   border: none;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Title */
+/* ─── Title ─── */
 .add-property-container h3 {
-  color: var(--color-dark);
-  letter-spacing: .5px;
+  color: var(--realty-blue-700);
+  letter-spacing: 0.5px;
 }
 
-/* Inputs */
+/* ─── Inputs ─── */
 .form-control,
-.form-select,select{
+.form-select,
+select {
   border-radius: 8px;
-  border: 1px solid #e2ddd7;
+  border: 1px solid var(--realty-gray-200);
   padding: 10px 12px;
-  transition: all .25s ease;
+  transition: all 0.25s ease;
   background: #fff;
 }
 
-/* Focus */
+/* ─── Focus ─── */
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(201,124,93,0.2);
+  border-color: var(--realty-terracotta-500);
+  box-shadow: 0 0 0 2px rgba(196, 92, 75, 0.2);
 }
 
-/* Input group */
+/* ─── Input group ─── */
 .input-group-text {
-  background: var(--color-secondary);
-  border: 1px solid #e2ddd7;
-  color: var(--color-dark);
+  background: var(--realty-cream-100);
+  border: 1px solid var(--realty-gray-200);
+  color: var(--realty-blue-800);
 }
 
-/* Labels */
+/* ─── Labels ─── */
 .form-label {
-  color: var(--color-dark);
+  color: var(--realty-blue-800);
   font-size: 16px;
   font-weight: 600;
+  margin-bottom: 8px;
 }
 
-/* Switch */
+/* ─── Checkbox ─── */
 .form-check-input:checked {
-    background-color: #8a2c2c;
-    accent-color: #8a2c2c;
-    border-radius: 4px;
-    color: #8a2c2c;
-    outline: 0;
-    border: 1px solid #8a2c2c;
+  background-color: var(--realty-terracotta-500);
+  accent-color: var(--realty-terracotta-500);
+  border-radius: 4px;
+  color: var(--realty-terracotta-500);
+  outline: 0;
+  border: 1px solid var(--realty-terracotta-500);
 }
+
 .form-check-input:focus {
   outline: none;
 }
 
-/* Button */
+/* ─── Button ─── */
 .btn-primary {
-  background: var(--color-primary);
+  background: var(--realty-blue-500);
   border: none;
-  transition: all .3s;
+  transition: all 0.3s;
+  color: white;
 }
 
 .btn-primary:hover {
-  background: var(--color-accent);
+  background: var(--realty-terracotta-500);
   transform: translateY(-1px);
 }
 
-/* File input */
+/* ─── File input ─── */
 input[type="file"] {
   padding: 8px;
 }
 
-/* Alert */
+/* ─── Alert ─── */
 .alert-success {
-  background: #e8f5ee;
-  color: #1e6b43;
+  background: var(--realty-sage-50);
+  color: var(--realty-sage-800);
   border: none;
 }
 
 .alert-danger {
-  background: #fdecea;
-  color: #8a2c2c;
+  background: var(--realty-terracotta-50);
+  color: var(--realty-terracotta-900);
   border: none;
 }
 
-/* Additional options title */
+/* ─── Sub title ─── */
 h5 {
-  color: var(--color-primary);
+  color: var(--realty-blue-600);
 }
 
- option{
-  background: #cfc9c3;
-  color: #37312C;
+/* ─── Option ─── */
+option {
+  background: var(--realty-cream-200);
+  color: var(--realty-blue-900);
 }
 
-
-
+/* ─── File Upload ─── */
 .file-upload {
   position: relative;
-  border: 2px dashed #b8bcbf;
+  border: 2px dashed var(--realty-gray-300);
   border-radius: 10px;
   padding: 40px;
   text-align: center;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--realty-cream-50);
   transition: background-color 0.3s ease-in-out;
 }
 
 .file-upload:hover {
-  background-color: #e2e6ea;
+  background-color: var(--realty-cream-200);
 }
 
 .file-input {
@@ -135,17 +147,17 @@ h5 {
 
 .upload-icon {
   font-size: 50px;
-  color: #007bff;
+  color: var(--realty-blue-400);
   margin-bottom: 10px;
 }
 
 .file-upload p {
   margin: 0;
   font-size: 16px;
-  color: #6c757d;
+  color: var(--realty-gray-500);
 }
 
 .file-upload.dragover {
-  background-color: #007bff;
+  background-color: var(--realty-blue-400);
   color: white;
 }

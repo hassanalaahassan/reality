@@ -3,14 +3,129 @@
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
 
-/* Define your custom theme colors */
-@theme { 
-  --color-primary: #8B7E74;    /* earthy taupe */
-  --color-secondary: #F5F0E8;  /* soft beige */
-  --color-accent: #C97C5D;      /* muted terracotta */
-  --color-dark: #37312C;        /* dark earthy brown */
-  --color-light: #F9F6F0;       /* off-white */
-  --color-accent: #C97C5D;
+:root {
+  /* الأزرق الداكن - للثقة والمهنية */
+  --realty-blue-50: #E8EAF2;
+  --realty-blue-100: #C5CAE0;
+  --realty-blue-200: #9FA8CC;
+  --realty-blue-300: #7986B8;
+  --realty-blue-400: #5C6BA9;
+  --realty-blue-500: #1A2B5F; /* الرئيسي */
+  --realty-blue-600: #162655;
+  --realty-blue-700: #12204A;
+  --realty-blue-800: #0E1A40;
+  --realty-blue-900: #0A1435;
+
+  /* التراكوتا - للطاقة والجذب */
+  --realty-terracotta-50: #FBEBE9;
+  --realty-terracotta-100: #F6CDC7;
+  --realty-terracotta-200: #F0ABA2;
+  --realty-terracotta-300: #EA897D;
+  --realty-terracotta-400: #E56F5F;
+  --realty-terracotta-500: #C45C4B; /* الرئيسي */
+  --realty-terracotta-600: #B05444;
+  --realty-terracotta-700: #9D4A3B;
+  --realty-terracotta-800: #8B4033;
+  --realty-terracotta-900: #793628;
+
+  /* السيج - للطبيعة والهدوء */
+  --realty-sage-50: #F3F5EF;
+  --realty-sage-100: #E1E6D8;
+  --realty-sage-200: #CED6C1;
+  --realty-sage-300: #BBC6AA;
+  --realty-sage-400: #ADB998;
+  --realty-sage-500: #8A9B6E; /* الرئيسي */
+  --realty-sage-600: #7D8C63;
+  --realty-sage-700: #6F7C58;
+  --realty-sage-800: #616C4E;
+  --realty-sage-900: #535D44;
+
+  /* الرمادي الدافئ - للحيادية */
+  --realty-gray-50: #F5F5F4;
+  --realty-gray-100: #E8E7E6;
+  --realty-gray-200: #D9D8D7;
+  --realty-gray-300: #CAC9C8;
+  --realty-gray-400: #BEBDBB;
+  --realty-gray-500: #7C7873; /* الرئيسي */
+  --realty-gray-600: #706C68;
+  --realty-gray-700: #63605C;
+  --realty-gray-800: #575451;
+  --realty-gray-900: #4A4845;
+
+  /* الكريمي - للدفء والترحيب */
+  --realty-cream-50: #FEFDFB;
+  --realty-cream-100: #FCFAF5;
+  --realty-cream-200: #FAF7EF;
+  --realty-cream-300: #F8F4E9;
+  --realty-cream-400: #F7F2E4;
+  --realty-cream-500: #F5F0E6; /* الرئيسي */
+  --realty-cream-600: #DDD8CF;
+  --realty-cream-700: #B9B5AD;
+  --realty-cream-800: #94918B;
+  --realty-cream-900: #7A7772;
+}
+
+/* إضافة جميع الدرجات لـ Tailwind */
+@theme {
+  /* الأزرق */
+  --color-realty-blue-50: var(--realty-blue-50);
+  --color-realty-blue-100: var(--realty-blue-100);
+  --color-realty-blue-200: var(--realty-blue-200);
+  --color-realty-blue-300: var(--realty-blue-300);
+  --color-realty-blue-400: var(--realty-blue-400);
+  --color-realty-blue-500: var(--realty-blue-500);
+  --color-realty-blue-600: var(--realty-blue-600);
+  --color-realty-blue-700: var(--realty-blue-700);
+  --color-realty-blue-800: var(--realty-blue-800);
+  --color-realty-blue-900: var(--realty-blue-900);
+
+  /* التراكوتا */
+  --color-realty-terracotta-50: var(--realty-terracotta-50);
+  --color-realty-terracotta-100: var(--realty-terracotta-100);
+  --color-realty-terracotta-200: var(--realty-terracotta-200);
+  --color-realty-terracotta-300: var(--realty-terracotta-300);
+  --color-realty-terracotta-400: var(--realty-terracotta-400);
+  --color-realty-terracotta-500: var(--realty-terracotta-500);
+  --color-realty-terracotta-600: var(--realty-terracotta-600);
+  --color-realty-terracotta-700: var(--realty-terracotta-700);
+  --color-realty-terracotta-800: var(--realty-terracotta-800);
+  --color-realty-terracotta-900: var(--realty-terracotta-900);
+
+  /* السيج */
+  --color-realty-sage-50: var(--realty-sage-50);
+  --color-realty-sage-100: var(--realty-sage-100);
+  --color-realty-sage-200: var(--realty-sage-200);
+  --color-realty-sage-300: var(--realty-sage-300);
+  --color-realty-sage-400: var(--realty-sage-400);
+  --color-realty-sage-500: var(--realty-sage-500);
+  --color-realty-sage-600: var(--realty-sage-600);
+  --color-realty-sage-700: var(--realty-sage-700);
+  --color-realty-sage-800: var(--realty-sage-800);
+  --color-realty-sage-900: var(--realty-sage-900);
+
+  /* الرمادي */
+  --color-realty-gray-50: var(--realty-gray-50);
+  --color-realty-gray-100: var(--realty-gray-100);
+  --color-realty-gray-200: var(--realty-gray-200);
+  --color-realty-gray-300: var(--realty-gray-300);
+  --color-realty-gray-400: var(--realty-gray-400);
+  --color-realty-gray-500: var(--realty-gray-500);
+  --color-realty-gray-600: var(--realty-gray-600);
+  --color-realty-gray-700: var(--realty-gray-700);
+  --color-realty-gray-800: var(--realty-gray-800);
+  --color-realty-gray-900: var(--realty-gray-900);
+
+  /* الكريمي */
+  --color-realty-cream-50: var(--realty-cream-50);
+  --color-realty-cream-100: var(--realty-cream-100);
+  --color-realty-cream-200: var(--realty-cream-200);
+  --color-realty-cream-300: var(--realty-cream-300);
+  --color-realty-cream-400: var(--realty-cream-400);
+  --color-realty-cream-500: var(--realty-cream-500);
+  --color-realty-cream-600: var(--realty-cream-600);
+  --color-realty-cream-700: var(--realty-cream-700);
+  --color-realty-cream-800: var(--realty-cream-800);
+  --color-realty-cream-900: var(--realty-cream-900);
 
   --animate-fade-in: fade-in 0.25s ease-out;
 }

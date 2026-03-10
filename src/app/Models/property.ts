@@ -4,12 +4,16 @@ export interface Property {
   price: number | null;
   location: string;
   area: string;
-  status: string;          
+  status: string;
   isVip: boolean | null;
   isNegotiable: boolean | null;
-  image_urls: string[] | null;  
-  ownerName?: string;      
+  image_urls: string[] | null;
+  ownerName?: string;
   ownerPhone?: string;
+  floor?: number | null;
+  beds?: number | null;
+  bathroom?: number | null;
+  features?: string[];
 }
 export interface PropertyForm {
   title: string;
@@ -19,9 +23,13 @@ export interface PropertyForm {
   status: string;
   isVip: boolean;
   isNegotiable: boolean;
-  ownerName:string,
-  ownerPhone:string,
-  type:string
+  ownerName: string;
+  ownerPhone: string;
+  type: string;
   image_urls: string[] | null;
-  user_id:string | undefined
+  user_id: string | undefined;
+  floor: number | null;
+  beds: number | null;
+  bathroom: number | null;
+  features: string[];
 }

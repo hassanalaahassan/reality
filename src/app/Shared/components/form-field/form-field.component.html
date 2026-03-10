@@ -1,20 +1,76 @@
 <div class="mb-2">
-  <label [for]="fieldId()" class="block text-sm font-medium text-dark">
+  <label
+    [for]="fieldId()"
+    class="block text-sm font-medium text-realty-blue-800"
+  >
     {{ label() }}
   </label>
-  <input
-    [type]="type()"
-    [id]="fieldId()"
-    [name]="fieldId()"
-    [placeholder]="placeholder()"
-    [value]="value()"
-    (input)="onInput($event)"
-    (blur)="onBlur()"
-    class="mt-1 block w-full rounded-md bg-light/50 px-3 py-2 shadow-sm transition-colors duration-200 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-    [class.border-red-400]="touched() && error()"
-  />
+
+  <!-- Input wrapper (relative for password eye icon) -->
+  <div class="relative">
+    <input
+      [type]="inputType"
+      [id]="fieldId()"
+      [name]="fieldId()"
+      [placeholder]="placeholder()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+      class="mt-1 block w-full rounded-md bg-realty-cream-50 px-3 py-2 shadow-sm transition-colors duration-200 border border-realty-gray-200 focus:border-realty-terracotta-500 focus:outline-none focus:ring-1 focus:ring-realty-terracotta-500"
+      [class.border-realty-terracotta-400]="touched() && error()"
+      [class.pr-10]="isPasswordField"
+    />
+
+    <!-- Password Eye Toggle -->
+    <button
+      *ngIf="isPasswordField"
+      type="button"
+      (click)="togglePasswordVisibility()"
+      class="absolute right-2 top-1/2 -translate-y-1/2 mt-0.5 text-realty-gray-400 hover:text-realty-blue-600 transition-colors p-1 focus:outline-none"
+      tabindex="-1"
+    >
+      <!-- Eye Open (password hidden → click to show) -->
+      <svg
+        *ngIf="!passwordVisible()"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+        />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+      <!-- Eye Closed (password visible → click to hide) -->
+      <svg
+        *ngIf="passwordVisible()"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
+        />
+      </svg>
+    </button>
+  </div>
+
   @if (touched() && error()) {
-    <p class="mt-1 text-sm text-red-500 animate-fade-in">
+    <p class="mt-1 text-sm text-realty-terracotta-500 animate-fade-in">
       {{ error() }}
     </p>
   }

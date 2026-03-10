@@ -59,25 +59,25 @@ export class AuthValidator {
     };
   }
   static validateLogin(form: LoginForm): ValidationResultLogin {
-  const errors: ValidationResultLogin['errors'] = {};
+    const errors: ValidationResultLogin['errors'] = {};
 
-  if (!form.email) {
-    errors.email = 'Email is required';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    errors.email = 'Invalid email format';
+    if (!form.email) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errors.email = 'Invalid email format';
+    }
+
+    if (!form.password) {
+      errors.password = 'Password is required';
+    } else if (form.password.length < 6) {
+      errors.password = 'Minimum 6 characters';
+    }
+
+    return {
+      valid: Object.keys(errors).length === 0,
+      errors,
+    };
   }
-
-  if (!form.password) {
-    errors.password = 'Password is required';
-  } else if (form.password.length < 6) {
-    errors.password = 'Minimum 6 characters';
-  }
-
-  return {
-    valid: Object.keys(errors).length === 0,
-    errors,
-  };
-}
   static markTouched(
     touched: TouchedState,
     field: keyof RegisterForm,
@@ -119,13 +119,26 @@ export class AuthValidator {
     const errors: Partial<Record<keyof PropertyForm, string>> = {};
 
     if (!form.title.trim()) errors.title = 'Title is required';
-    if (!form.price || form.price <= 0) errors.price = 'Price must be greater than 0';
+    if (!form.price || form.price <= 0)
+      errors.price = 'Price must be greater than 0';
     if (!form.area.trim()) errors.area = 'Area is required';
     if (!form.location.trim()) errors.location = 'Location is required';
     if (!form.type) errors.type = 'Property type is required';
     if (!form.status) errors.status = 'Status is required';
     if (!form.ownerName.trim()) errors.ownerName = 'Owner name is required';
     if (!form.ownerPhone.trim()) errors.ownerPhone = 'Owner phone is required';
+    if (form.floor === null || form.floor === undefined || form.floor < 0)
+      errors.floor = 'Floor is required (0 or more)';
+    if (form.beds === null || form.beds === undefined || form.beds < 0)
+      errors.beds = 'Bedrooms count is required (0 or more)';
+    if (
+      form.bathroom === null ||
+      form.bathroom === undefined ||
+      form.bathroom < 0
+    )
+      errors.bathroom = 'Bathrooms count is required (0 or more)';
+    if (!form.features || form.features.length === 0)
+      errors.features = 'At least one feature is required';
 
     const valid = Object.keys(errors).length === 0;
 

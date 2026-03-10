@@ -24,15 +24,15 @@ export class AlertComponent {
   get typeClasses(): string {
     switch (this.type()) {
       case 'error':
-        return 'bg-red-50 border-red-300 text-red-700';
+        return 'bg-realty-terracotta-50 border-realty-terracotta-300 text-realty-terracotta-700';
       case 'success':
-        return 'bg-green-50 border-green-300 text-green-700';
+        return 'bg-realty-sage-50 border-realty-sage-300 text-realty-sage-700';
       case 'warning':
-        return 'bg-yellow-50 border-yellow-300 text-yellow-700';
+        return 'bg-realty-cream-100 border-realty-cream-500 text-realty-gray-800';
       case 'info':
-        return 'bg-blue-50 border-blue-300 text-blue-700';
+        return 'bg-realty-blue-50 border-realty-blue-300 text-realty-blue-700';
       default:
-        return 'bg-red-50 border-red-300 text-red-700';
+        return 'bg-realty-terracotta-50 border-realty-terracotta-300 text-realty-terracotta-700';
     }
   }
 

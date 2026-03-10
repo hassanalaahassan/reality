@@ -1,8 +1,10 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-form-field',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './form-field.component.html',
   host: { style: 'display: contents' },
 })
@@ -33,6 +35,24 @@ export class FormFieldComponent {
 
   /** Emitted when the field loses focus */
   fieldBlur = output<void>();
+
+  /** Password visibility toggle */
+  passwordVisible = signal(false);
+
+  get inputType(): string {
+    if (this.type() === 'password') {
+      return this.passwordVisible() ? 'text' : 'password';
+    }
+    return this.type();
+  }
+
+  get isPasswordField(): boolean {
+    return this.type() === 'password';
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible.update((v) => !v);
+  }
 
   onInput(event: Event) {
     const target = event.target as HTMLInputElement;
