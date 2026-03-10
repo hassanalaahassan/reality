@@ -9,6 +9,11 @@ import { ToastService } from '../../../Services/toast.service';
 import { PropertyForm } from '../../../Models/property';
 import { AuthValidator } from '../../../Services/validation.service';
 
+interface FeatureRow {
+  id: number;
+  value: string;
+}
+
 @Component({
   selector: 'app-add-property',
   standalone: true,
@@ -42,73 +47,112 @@ export class AddPropertyComponent {
     features: [],
   });
 
+  // All errors (signal so template reacts)
   errors = signal<Partial<Record<keyof PropertyForm, string>>>({});
+
+  // Touched fields (signal so template reacts)
+  touched = signal<Record<string, boolean>>({});
 
   selectedFiles: File[] = [];
   isSubmitting = false;
 
-  // Dynamic feature inputs — each feature is an editable string
-  featureInputs = signal<string[]>([]);
+  // Feature rows as signal<FeatureRow[]> with stable IDs → no flicker
+  private featureCounter = 0;
+  featureRows = signal<FeatureRow[]>([]);
 
-  // Computed validity for button disable
+  // Computed form validity
   isFormValid = computed(() => {
     const { valid } = this.validationService.validateProperty(this.form());
     return valid;
   });
 
+  // trackBy for feature *ngFor — stable ID means Angular won't re-create DOM
+  trackById(_index: number, row: FeatureRow): number {
+    return row.id;
+  }
+
+  // ── Field updates ──────────────────────────────────
   updateField(field: keyof PropertyForm, value: any) {
-    this.form.update((f) => ({
-      ...f,
-      [field]: value,
-    }));
-
-    // Real-time validation
-    const { errors } = this.validationService.validateProperty(this.form());
-    this.errors.set(errors);
+    this.form.update((f) => ({ ...f, [field]: value }));
+    this.touched.update((t) => ({ ...t, [field]: true }));
+    this.runValidation();
   }
 
-  get isAgent(): boolean {
-    const user = this.authService.currentUser();
-    return !!user?.profile?.isAgent;
-  }
-
-  onFileSelect(event: any) {
-    if (event.target.files && event.target.files.length > 0) {
-      this.selectedFiles = Array.from(event.target.files);
+  private runValidation() {
+    const { errors: allErrors } = this.validationService.validateProperty(
+      this.form(),
+    );
+    const t = this.touched();
+    // Show only errors for fields the user has touched
+    const filtered: Partial<Record<keyof PropertyForm, string>> = {};
+    for (const key in allErrors) {
+      if (t[key]) (filtered as any)[key] = (allErrors as any)[key];
     }
+    this.errors.set(filtered);
   }
 
-  // ── Features management (dynamic inputs) ──
+  // ── Features ───────────────────────────────────────
   addFeatureInput() {
-    this.featureInputs.update((inputs) => [...inputs, '']);
+    this.featureRows.update((rows) => [
+      ...rows,
+      { id: this.featureCounter++, value: '' },
+    ]);
   }
 
-  updateFeatureInput(index: number, value: string) {
-    this.featureInputs.update((inputs) => {
-      const updated = [...inputs];
-      updated[index] = value;
-      return updated;
-    });
-    // Sync features to form (only non-empty values)
+  updateFeatureValue(id: number, value: string) {
+    // Update only the value of the matching row — other rows untouched → no re-render jank
+    this.featureRows.update((rows) =>
+      rows.map((r) => (r.id === id ? { ...r, value } : r)),
+    );
     this.syncFeaturesToForm();
   }
 
-  removeFeatureInput(index: number) {
-    this.featureInputs.update((inputs) => inputs.filter((_, i) => i !== index));
+  removeFeatureRow(id: number) {
+    this.featureRows.update((rows) => rows.filter((r) => r.id !== id));
     this.syncFeaturesToForm();
   }
 
   private syncFeaturesToForm() {
-    const features = this.featureInputs().filter((f) => f.trim() !== '');
+    const features = this.featureRows()
+      .map((r) => r.value.trim())
+      .filter((v) => v !== '');
     this.form.update((f) => ({ ...f, features }));
-    // Re-validate
-    const { errors } = this.validationService.validateProperty(this.form());
-    this.errors.set(errors);
+    this.touched.update((t) => ({ ...t, features: true }));
+    this.runValidation();
+  }
+
+  // ── Misc ───────────────────────────────────────────
+  get isAgent(): boolean {
+    return !!this.authService.currentUser()?.profile?.isAgent;
+  }
+
+  onFileSelect(event: any) {
+    if (event.target.files?.length > 0) {
+      this.selectedFiles = Array.from(event.target.files);
+    }
   }
 
   onSubmit() {
-    // Sync features one final time
     this.syncFeaturesToForm();
+
+    // Mark ALL fields touched to show every error
+    const allFields: (keyof PropertyForm)[] = [
+      'title',
+      'price',
+      'area',
+      'location',
+      'status',
+      'type',
+      'ownerName',
+      'ownerPhone',
+      'floor',
+      'beds',
+      'bathroom',
+      'features',
+    ];
+    const allTouched: Record<string, boolean> = {};
+    allFields.forEach((f) => (allTouched[f] = true));
+    this.touched.set(allTouched);
 
     const { valid, errors } = this.validationService.validateProperty(
       this.form(),
@@ -119,7 +163,6 @@ export class AddPropertyComponent {
       this.toast.error('Please fix the errors in the form before submitting.');
       return;
     }
-
     if (this.isSubmitting) return;
 
     this.isSubmitting = true;
@@ -143,7 +186,6 @@ export class AddPropertyComponent {
             err?.message ||
             'Failed to add property. Please try again.';
           this.toast.error(message);
-          console.error(err);
           return of();
         }),
       )

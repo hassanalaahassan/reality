@@ -1,0 +1,12 @@
+.properties-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+@media (max-width: 640px) {
+  .properties-container {
+    grid-template-columns: 1fr;
+  }
+}

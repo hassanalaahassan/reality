@@ -29,8 +29,8 @@
           />
         </svg>
         <span class="text-xl text-realty-terracotta-600 text-center">
-          Access Denied. You do not have permission to add properties. Only
-          users with an <strong>Agent</strong> account can submit properties.
+          Access Denied. Only <strong>Agent</strong> accounts can submit
+          properties.
         </span>
       </div>
 
@@ -47,15 +47,15 @@
               [value]="form().title"
               (input)="updateField('title', $any($event.target).value)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().title"
             >
               {{ errors().title }}
-            </div>
+            </p>
           </div>
 
-          <!-- Property Price (text, no arrows) -->
+          <!-- Property Price -->
           <div class="col-span-6 md:col-span-3 flex flex-col">
             <label for="price" class="form-label">Property Price</label>
             <input
@@ -66,12 +66,12 @@
               [value]="form().price ?? ''"
               (input)="updateField('price', +$any($event.target).value || null)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().price"
             >
               {{ errors().price }}
-            </div>
+            </p>
           </div>
 
           <!-- Property Type -->
@@ -91,12 +91,12 @@
               <option value="land">Land</option>
               <option value="shop">Shop</option>
             </select>
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().type"
             >
               {{ errors().type }}
-            </div>
+            </p>
           </div>
 
           <!-- Status -->
@@ -112,12 +112,12 @@
               <option value="rent">Rent</option>
               <option value="sale">Sale</option>
             </select>
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().status"
             >
               {{ errors().status }}
-            </div>
+            </p>
           </div>
 
           <!-- Location -->
@@ -130,17 +130,17 @@
               [value]="form().location"
               (input)="updateField('location', $any($event.target).value)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().location"
             >
               {{ errors().location }}
-            </div>
+            </p>
           </div>
 
           <!-- Area -->
           <div class="col-span-6 md:col-span-3 flex flex-col">
-            <label for="area" class="form-label">Area</label>
+            <label for="area" class="form-label">Area (m²)</label>
             <input
               type="text"
               id="area"
@@ -148,15 +148,15 @@
               [value]="form().area"
               (input)="updateField('area', $any($event.target).value)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().area"
             >
               {{ errors().area }}
-            </div>
+            </p>
           </div>
 
-          <!-- Floor (text, no arrows) -->
+          <!-- Floor -->
           <div class="col-span-6 md:col-span-2 flex flex-col">
             <label for="floor" class="form-label">Floor</label>
             <input
@@ -165,17 +165,17 @@
               class="form-control"
               inputmode="numeric"
               [value]="form().floor ?? ''"
-              (input)="updateField('floor', +$any($event.target).value || null)"
+              (input)="updateField('floor', +$any($event.target).value || 0)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().floor"
             >
               {{ errors().floor }}
-            </div>
+            </p>
           </div>
 
-          <!-- Beds (text, no arrows) -->
+          <!-- Beds -->
           <div class="col-span-6 md:col-span-2 flex flex-col">
             <label for="beds" class="form-label">Bedrooms</label>
             <input
@@ -184,17 +184,17 @@
               class="form-control"
               inputmode="numeric"
               [value]="form().beds ?? ''"
-              (input)="updateField('beds', +$any($event.target).value || null)"
+              (input)="updateField('beds', +$any($event.target).value || 0)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().beds"
             >
               {{ errors().beds }}
-            </div>
+            </p>
           </div>
 
-          <!-- Bathroom (text, no arrows) -->
+          <!-- Bathroom -->
           <div class="col-span-6 md:col-span-2 flex flex-col">
             <label for="bathroom" class="form-label">Bathrooms</label>
             <input
@@ -203,41 +203,40 @@
               class="form-control"
               inputmode="numeric"
               [value]="form().bathroom ?? ''"
-              (input)="
-                updateField('bathroom', +$any($event.target).value || null)
-              "
+              (input)="updateField('bathroom', +$any($event.target).value || 0)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().bathroom"
             >
               {{ errors().bathroom }}
-            </div>
+            </p>
           </div>
 
-          <!-- Features (Dynamic Inputs) -->
+          <!-- Features (Signal-based, stable IDs, no flicker) -->
           <div class="col-span-6 flex flex-col">
             <label class="form-label">Features</label>
 
-            <!-- Existing feature inputs with smooth animation -->
             <div class="space-y-2">
+              <!--
+                trackById: stable ID → Angular reuses the <input> DOM node and doesn't re-create it.
+                No [value] binding → the input is uncontrolled, user types freely.
+                (blur) → syncs value to the signal only when user leaves the field.
+              -->
               <div
-                *ngFor="let feat of featureInputs(); let i = index"
+                *ngFor="let row of featureRows(); trackBy: trackById"
                 class="flex gap-2 items-center animate-slide-down"
               >
                 <input
                   type="text"
                   class="form-control flex-1"
-                  [placeholder]="
-                    'Feature ' + (i + 1) + '  (e.g. Pool, Garage, Garden)'
-                  "
-                  [value]="feat"
-                  (blur)="updateFeatureInput(i, $any($event.target).value)"
+                  [placeholder]="'e.g. Pool, Garage, Garden...'"
+                  (blur)="updateFeatureValue(row.id, $any($event.target).value)"
                 />
                 <button
                   type="button"
                   class="flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg bg-realty-terracotta-50 text-realty-terracotta-500 hover:bg-realty-terracotta-100 hover:text-realty-terracotta-700 transition-colors"
-                  (click)="removeFeatureInput(i)"
+                  (click)="removeFeatureRow(row.id)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -280,12 +279,12 @@
               Add Feature
             </button>
 
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().features"
             >
               {{ errors().features }}
-            </div>
+            </p>
           </div>
 
           <!-- Owner Name -->
@@ -298,12 +297,12 @@
               [value]="form().ownerName"
               (input)="updateField('ownerName', $any($event.target).value)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().ownerName"
             >
               {{ errors().ownerName }}
-            </div>
+            </p>
           </div>
 
           <!-- Owner Phone -->
@@ -316,31 +315,29 @@
               [value]="form().ownerPhone"
               (input)="updateField('ownerPhone', $any($event.target).value)"
             />
-            <div
+            <p
               class="text-realty-terracotta-500 text-sm mt-1"
               *ngIf="errors().ownerPhone"
             >
               {{ errors().ownerPhone }}
-            </div>
+            </p>
           </div>
 
           <!-- File Upload -->
           <div class="col-span-6 flex flex-col">
             <label class="form-label">Upload Images</label>
-            <div class="file-upload-container">
-              <div class="file-upload">
-                <input
-                  type="file"
-                  id="fileInput"
-                  class="file-input"
-                  multiple
-                  (change)="onFileSelect($event)"
-                />
-                <label class="file-label" for="fileInput">
-                  <i class="upload-icon">📁</i>
-                  <p>Click here to upload your files</p>
-                </label>
-              </div>
+            <div class="file-upload">
+              <input
+                type="file"
+                id="fileInput"
+                class="file-input"
+                multiple
+                (change)="onFileSelect($event)"
+              />
+              <label class="file-label" for="fileInput">
+                <i class="upload-icon">📁</i>
+                <p>Click here to upload your files</p>
+              </label>
             </div>
             <div *ngIf="selectedFiles.length > 0" class="mt-2">
               <ul class="list-disc pl-5 text-sm">
