@@ -1,0 +1,21 @@
+<div class="mb-2">
+  <label [for]="fieldId()" class="block text-sm font-medium text-dark">
+    {{ label() }}
+  </label>
+  <input
+    [type]="type()"
+    [id]="fieldId()"
+    [name]="fieldId()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="mt-1 block w-full rounded-md bg-light/50 px-3 py-2 shadow-sm transition-colors duration-200 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+    [class.border-red-400]="touched() && error()"
+  />
+  @if (touched() && error()) {
+    <p class="mt-1 text-sm text-red-500 animate-fade-in">
+      {{ error() }}
+    </p>
+  }
+</div>

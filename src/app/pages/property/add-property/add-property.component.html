@@ -1,0 +1,200 @@
+<div class="add-property-container container mt-4 mb-5 w-full">
+  <div class="card shadow border-0">
+    <div class="card-body p-4">
+      <h3 class="card-title text-center fw-bold mb-4 text-primary text-xl">
+        Add New Property
+      </h3>
+
+      <!-- Non-Agent Error Message -->
+      <div *ngIf="!isAgent" class="alert alert-red-500 d-flex align-items-center" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <span>
+          Access Denied. You do not have permission to add properties. Only
+          users with an <strong>Agent</strong> account can submit properties.
+        </span>
+      </div>
+
+      <!-- Agent Property Form -->
+      <form *ngIf="isAgent" (submit)="$event.preventDefault()">
+        <div class="grid grid-cols-6 gap-4">
+
+          <!-- Property Title -->
+          <div class="col-span-3 flex flex-col">
+            <label for="title" class="form-label">Property Title</label>
+            <input
+              type="text"
+              id="title"
+              class="form-control"
+              [value]="form().title"
+              (input)="updateField('title', $any($event.target).value)"
+            />
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().title">{{ errors().title }}</div>
+          </div>
+
+          <!-- Property Price -->
+          <div class="col-span-3 flex flex-col">
+            <label for="price" class="form-label">Property Price</label>
+            <input
+              type="number"
+              id="price"
+              class="form-control"
+              [value]="form().price"
+              (input)="updateField('price', $any($event.target).value)"
+            />
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().price">{{ errors().price }}</div>
+          </div>
+
+          <!-- Property Type -->
+          <div class="col-span-3 flex flex-col">
+            <label for="type" class="form-label">Property Type</label>
+            <select
+              id="type"
+              class="form-control"
+              [value]="form().type"
+              (change)="updateField('type', $any($event.target).value)"
+            >
+              <option value="" disabled>Select Property Type</option>
+              <option value="apartment">Apartment</option>
+              <option value="chalet">Chalet</option>
+              <option value="villa">Villa</option>
+              <option value="studio">Studio</option>
+              <option value="land">Land</option>
+              <option value="shop">Shop</option>
+            </select>
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().type">{{ errors().type }}</div>
+          </div>
+
+          <!-- Status -->
+          <div class="col-span-3 flex flex-col">
+            <label for="status" class="form-label">Status</label>
+            <select
+              id="status"
+              class="form-control"
+              [value]="form().status"
+              (change)="updateField('status', $any($event.target).value)"
+            >
+              <option value="" disabled>Select Status</option>
+              <option value="rent">Rent</option>
+              <option value="sale">Sale</option>
+            </select>
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().status">{{ errors().status }}</div>
+          </div>
+
+          <!-- Location -->
+          <div class="col-span-3 flex flex-col">
+            <label for="location" class="form-label">Location</label>
+            <input
+              type="text"
+              id="location"
+              class="form-control"
+              [value]="form().location"
+              (input)="updateField('location', $any($event.target).value)"
+            />
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().location">{{ errors().location }}</div>
+          </div>
+
+          <!-- Area -->
+          <div class="col-span-3 flex flex-col">
+            <label for="area" class="form-label">Area</label>
+            <input
+              type="text"
+              id="area"
+              class="form-control"
+              [value]="form().area"
+              (input)="updateField('area', $any($event.target).value)"
+            />
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().area">{{ errors().area }}</div>
+          </div>
+
+          <!-- Owner Name -->
+          <div class="col-span-3 flex flex-col">
+            <label for="ownerName" class="form-label">Owner Name</label>
+            <input
+              type="text"
+              id="ownerName"
+              class="form-control"
+              [value]="form().ownerName"
+              (input)="updateField('ownerName', $any($event.target).value)"
+            />
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().ownerName">{{ errors().ownerName }}</div>
+          </div>
+
+          <!-- Owner Phone -->
+          <div class="col-span-3 flex flex-col">
+            <label for="ownerPhone" class="form-label">Owner Phone</label>
+            <input
+              type="text"
+              id="ownerPhone"
+              class="form-control"
+              [value]="form().ownerPhone"
+              (input)="updateField('ownerPhone', $any($event.target).value)"
+            />
+            <div class="text-red-500 text-sm mt-1" *ngIf="errors().ownerPhone">{{ errors().ownerPhone }}</div>
+          </div>
+
+          <!-- File Upload -->
+          <div class="col-span-6 flex flex-col">
+            <label class="form-label">Upload Images</label>
+            <div class="file-upload-container">
+              <div class="file-upload">
+                <input
+                  type="file"
+                  id="fileInput"
+                  class="file-input"
+                  multiple
+                  (change)="onFileSelect($event)"
+                />
+                <label class="file-label" for="fileInput">
+                  <i class="upload-icon">📁</i>
+                  <p>Click here to upload your files</p>
+                </label>
+              </div>
+            </div>
+            <div *ngIf="selectedFiles.length > 0" class="mt-2">
+              <ul class="list-disc pl-5 text-sm">
+                <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Checkboxes -->
+          <div class="col-span-1 flex gap-3">
+            <div class="check flex flex-col">
+              <label for="vip" class="form-label">Is VIP</label>
+              <input
+                type="checkbox"
+                id="vip"
+                class="form-check-input border-2 border-dark rounded-md"
+                [checked]="form().isVip"
+                (change)="updateField('isVip', $any($event.target).checked)"
+              />
+            </div>
+            <div class="check flex flex-col">
+              <label for="negotiable" class="form-label">Is Negotiable</label>
+              <input
+                type="checkbox"
+                id="negotiable"
+                class="form-check-input border-2 border-dark rounded-md"
+                [checked]="form().isNegotiable"
+                (change)="updateField('isNegotiable', $any($event.target).checked)"
+              />
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="col-span-5 flex justify-end">
+            <button
+              type="button"
+              class="btn btn-primary rounded-xl py-2 px-8 text-secondary text-lg"
+              (click)="onSubmit()"
+              [disabled]="isSubmitting"
+            >
+              {{ isSubmitting ? 'Submitting...' : 'Add Property' }}
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

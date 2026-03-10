@@ -1,0 +1,9 @@
+// Custom styles if Tailwind isn't enough, but it covers 99%
+:host {
+  display: block;
+}
+
+// Ensure the custom css tooltips appear above everything
+.group-hover\:visible {
+  pointer-events: none;
+}

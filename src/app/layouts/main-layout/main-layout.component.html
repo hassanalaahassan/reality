@@ -1,0 +1,16 @@
+<app-sidebar></app-sidebar>
+<main
+  class="min-h-screen transition-all duration-300 ease-in-out bg-[#F5F0E8] dark:bg-[#F5F0E8]"
+  [ngClass]="
+    layoutService.isMobile()
+      ? 'ml-16'
+      : layoutService.isSidebarPinned()
+        ? 'ml-64'
+        : 'ml-16'
+  "
+>
+  <div class="h-full p-4 md:p-6">
+    <!-- mt-16 if navbar exists, otherwise just padding -->
+    <router-outlet></router-outlet>
+  </div>
+</main>

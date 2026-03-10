@@ -1,0 +1,154 @@
+:root {
+  --color-primary: #8B7E74;
+  --color-secondary: #F5F0E8;
+  --color-accent: #C97C5D;
+  --color-dark: #37312C;
+  --color-light: #F9F6F0;
+}
+
+
+
+/* Card */
+.add-property-container .card {
+  background: var(--color-light);
+  border-radius: 14px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Title */
+.add-property-container h3 {
+  color: var(--color-dark);
+  letter-spacing: .5px;
+}
+
+/* Inputs */
+.form-control,
+.form-select,select{
+  border-radius: 8px;
+  border: 1px solid #e2ddd7;
+  padding: 10px 12px;
+  transition: all .25s ease;
+  background: #fff;
+}
+
+/* Focus */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(201,124,93,0.2);
+}
+
+/* Input group */
+.input-group-text {
+  background: var(--color-secondary);
+  border: 1px solid #e2ddd7;
+  color: var(--color-dark);
+}
+
+/* Labels */
+.form-label {
+  color: var(--color-dark);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Switch */
+.form-check-input:checked {
+    background-color: #8a2c2c;
+    accent-color: #8a2c2c;
+    border-radius: 4px;
+    color: #8a2c2c;
+    outline: 0;
+    border: 1px solid #8a2c2c;
+}
+.form-check-input:focus {
+  outline: none;
+}
+
+/* Button */
+.btn-primary {
+  background: var(--color-primary);
+  border: none;
+  transition: all .3s;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+/* File input */
+input[type="file"] {
+  padding: 8px;
+}
+
+/* Alert */
+.alert-success {
+  background: #e8f5ee;
+  color: #1e6b43;
+  border: none;
+}
+
+.alert-danger {
+  background: #fdecea;
+  color: #8a2c2c;
+  border: none;
+}
+
+/* Additional options title */
+h5 {
+  color: var(--color-primary);
+}
+
+ option{
+  background: #cfc9c3;
+  color: #37312C;
+}
+
+.file-upload-container {
+  width: 50%;
+  max-width: 500px;
+}
+
+.file-upload {
+  position: relative;
+  border: 2px dashed #b8bcbf;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.file-upload:hover {
+  background-color: #e2e6ea;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 50px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.file-upload p {
+  margin: 0;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.file-upload.dragover {
+  background-color: #007bff;
+  color: white;
+}

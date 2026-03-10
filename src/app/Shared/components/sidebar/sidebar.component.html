@@ -1,0 +1,239 @@
+<!-- Mobile Overlay -->
+<div
+  *ngIf="layoutService.isMobile() && layoutService.isSidebarExpanded()"
+  class="fixed inset-0 bg-black/50 z-40 transition-opacity"
+  (click)="layoutService.closeMobileSidebar()"
+></div>
+
+<!-- Sidebar Container -->
+<aside
+  class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out border-r flex flex-col bg-[var(--color-secondary)] border-[var(--color-primary)] dark:bg-[var(--color-dark)] dark:border-[var(--color-primary)]"
+  [ngClass]="layoutService.isSidebarExpanded() ? 'w-64 shadow-xl' : 'w-16'"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
+  <!-- Header / Logo -->
+  <div
+    class="h-16 flex items-center justify-between px-3 border-b border-[var(--color-primary)] dark:border-[var(--color-primary)]"
+  >
+    <div
+      class="flex items-center gap-3 overflow-hidden whitespace-nowrap transition-opacity duration-300"
+      [class.opacity-0]="!isSidebarExpanded()"
+      [class.w-0]="!isSidebarExpanded()"
+    >
+      <!-- House SVG Icon for Logo -->
+      <svg
+        class="w-8 h-8 flex-shrink-0 text-[var(--color-dark)] dark:text-[var(--color-light)]"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
+      </svg>
+      <span
+        class="text-xl font-bold font-sans text-[var(--color-dark)] dark:text-[var(--color-light)]"
+        >RealtyApp</span
+      >
+    </div>
+    <button
+      (click)="toggleSidebar()"
+      class="p-2 rounded-lg flex-shrink-0 transition-colors text-[var(--color-accent)] hover:bg-[var(--color-primary)] hover:text-[var(--color-light)] dark:text-[var(--color-accent)] dark:hover:bg-[var(--color-primary)] dark:hover:text-[var(--color-light)]"
+    >
+      <svg
+        *ngIf="isSidebarPinned()"
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+        ></path>
+      </svg>
+      <svg
+        *ngIf="!isSidebarPinned()"
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Navigation Links -->
+  <div class="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 space-y-2">
+    <a
+      *ngFor="let item of navItems()"
+      [routerLink]="item.route"
+      routerLinkActive="!bg-[var(--color-accent)] !text-[var(--color-light)] dark:!bg-[var(--color-accent)] dark:!text-[var(--color-light)] shadow-sm"
+      [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+      class="flex items-center p-2 rounded-lg group transition-colors relative text-[var(--color-dark)] hover:bg-[var(--color-primary)] hover:text-[var(--color-light)] dark:text-[var(--color-light)] dark:hover:bg-[var(--color-primary)] dark:hover:text-[var(--color-light)]"
+      [title]="!isSidebarExpanded() ? item.label : ''"
+    >
+      <!-- Placeholder SVG icon based on item.icon -->
+      <svg
+        class="w-6 h-6 flex-shrink-0 transition-colors"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          *ngIf="item.icon === 'home'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
+        <path
+          *ngIf="item.icon === 'building'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+        />
+        <path
+          *ngIf="item.icon === 'map'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+        />
+        <path
+          *ngIf="item.icon === 'heart'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        />
+        <path
+          *ngIf="item.icon === 'message'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+        />
+        <path
+          *ngIf="item.icon === 'settings'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+        <path
+          *ngIf="item.icon === 'plus'"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+      <span
+        class="ms-3 whitespace-nowrap overflow-hidden transition-all duration-300"
+        [ngClass]="
+          isSidebarExpanded()
+            ? 'opacity-100 max-w-[200px]'
+            : 'opacity-0 max-w-0'
+        "
+      >
+        {{ item.label }}
+      </span>
+
+      <!-- Custom CSS Tooltip for collapsed state -->
+      <div
+        *ngIf="!isSidebarExpanded()"
+        class="absolute left-14 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-md bg-[var(--color-dark)] text-[var(--color-light)] dark:bg-[var(--color-secondary)] dark:text-[var(--color-dark)]"
+      >
+        {{ item.label }}
+      </div>
+    </a>
+  </div>
+
+  <!-- Footer Actions -->
+  <div
+    class="p-3 border-t border-[var(--color-primary)] dark:border-[var(--color-primary)] space-y-2"
+  >
+    <!-- Logout -->
+    <button
+      (click)="logout()"
+      class="w-full flex items-center p-2 rounded-lg group transition-colors relative text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-light)] dark:text-[var(--color-accent)] dark:hover:bg-[var(--color-accent)] dark:hover:text-[var(--color-light)]"
+    >
+      <svg
+        class="w-6 h-6 flex-shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+        />
+      </svg>
+      <span
+        class="ms-3 whitespace-nowrap overflow-hidden transition-all duration-300"
+        [ngClass]="
+          isSidebarExpanded()
+            ? 'opacity-100 max-w-[200px]'
+            : 'opacity-0 max-w-0'
+        "
+      >
+        Log out
+      </span>
+      <div
+        *ngIf="!isSidebarExpanded()"
+        class="absolute left-14 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-md bg-[var(--color-dark)] text-[var(--color-light)] dark:bg-[var(--color-secondary)] dark:text-[var(--color-dark)]"
+      >
+        Log out
+      </div>
+    </button>
+
+    <!-- User Profile -->
+    <div
+      *ngIf="user()"
+      class="flex items-center gap-3 p-2 mt-2 rounded-lg bg-[var(--color-light)]/50 dark:bg-[var(--color-primary)]/20 shadow-sm border border-[var(--color-primary)]/20"
+    >
+      <img
+        [src]="
+          user()?.profile?.image_url
+        "
+        class="w-8 h-8 rounded-full flex-shrink-0 object-cover border border-[var(--color-primary)]"
+        alt="User Avatar"
+      />
+      <div
+        class="flex-col overflow-hidden whitespace-nowrap transition-all duration-300"
+        [ngClass]="
+          isSidebarExpanded()
+            ? 'opacity-100 max-w-[200px] flex'
+            : 'opacity-0 max-w-0 hidden'
+        "
+      >
+        <span
+          class="text-sm font-medium text-[var(--color-dark)] dark:text-[var(--color-light)] truncate"
+        >
+          {{ user()?.profile?.fullName }}
+        </span>
+        <span
+          class="text-xs text-[var(--color-primary)] dark:text-[var(--color-secondary)] truncate"
+        >
+          {{ user()?.auth?.email }}
+        </span>
+      </div>
+    </div>
+  </div>
+</aside>
