@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../property-card/property-card.component';
 import { PropertiesService } from '../../../Services/properties.service';
 import { Property } from '../../../Models/property';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-properties',
@@ -16,27 +17,35 @@ export class PropertiesComponent implements OnInit {
 
   properties = signal<Property[]>([]);
   isLoading = signal<boolean>(true);
+  favProperties = computed(() => this.propertiesService.favProperties());
 
-  // Create dummy array for skeleton loading
   skeletonArray = new Array(6).fill(0);
 
   ngOnInit() {
     this.loadProperties();
   }
 
+  checkPropertyFav(id: string): boolean {
+    return this.favProperties().includes(id);
+  }
+
   loadProperties() {
     this.isLoading.set(true);
-    // Simulate network delay for skeleton preview since we're using mock data now
-    // Actually, propertiesService.getProperties() might be fast or slow.
-    this.propertiesService.getProperties().subscribe({
-      next: (data: Property[]) => {
-        this.properties.set(data);
-        this.isLoading.set(false);
-      },
-      error: (err: any) => {
-        console.error('Failed to load properties', err);
-        this.isLoading.set(false);
-      },
-    });
+    this.propertiesService
+      .getProperties()
+      .pipe(tap(() => this.propertiesService.getFavProperties().subscribe()))
+      .subscribe({
+        next: (data: Property[]) => {
+          this.properties.set(data);
+          this.isLoading.set(false);
+        },
+        error: (err: any) => {
+          console.error('Failed to load properties', err);
+          this.isLoading.set(false);
+        },
+      });
+  }
+  onToggleFavorite(propertyId: string) {
+    this.propertiesService.toggleFavProperty(propertyId).subscribe();
   }
 }

@@ -76,6 +76,9 @@ export class SubabaseService {
       supabase.from(table).delete().eq('id', id),
     ) as unknown as Observable<void>;
   }
+  rpc(fnName: string, params?: any):Observable<any> {
+    return from(supabase.rpc(fnName, params)) as unknown as Observable<any>;
+  }
 
   // ===============================
   // STORAGE

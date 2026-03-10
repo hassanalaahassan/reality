@@ -8,11 +8,11 @@ import {
 import { LoginForm } from '../../../Models/auth';
 import { AuthService } from '../../../Services/auth.service';
 import { ToastService } from '../../../Services/toast.service';
-import { FormFieldComponent, AlertComponent } from '../../../Shared';
+import { FormFieldComponent} from '../../../Shared';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, FormFieldComponent, AlertComponent],
+  imports: [RouterLink, FormFieldComponent],
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

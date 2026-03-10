@@ -4,16 +4,6 @@
   <p class="mt-2 text-realty-gray-600">Create your account</p>
 </div>
 
-<!-- Server Error Alert -->
-<app-alert
-  [message]="serverError()"
-  type="error"
-  (dismissed)="clearServerError()"
-/>
-
-<!-- Success Alert -->
-<app-alert [message]="successMessage()" type="success" [dismissible]="false" />
-
 <!-- Form -->
 <form>
   <!-- Full Name -->

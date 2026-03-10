@@ -29,7 +29,7 @@ export class AuthService {
   readonly currentUser = this._user.asReadonly();
 
   /** Reactive logged-in check */
-  readonly isLoggedIn = computed(() => this._token() !== null);
+  readonly isLoggedIn = computed(() => this._token() !== null && this._user() !== null);
 
   // ═══════════════════════════════════════════════════
   //  REGISTER

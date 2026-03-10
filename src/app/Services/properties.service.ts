@@ -1,13 +1,20 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { SubabaseService } from '../core/subabase.service';
 import { Property, PropertyForm } from '../Models/property';
-import { Observable, forkJoin, map, from } from 'rxjs';
+import { Observable, forkJoin, map, from, switchMap, tap } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PropertiesService {
   private supabase = inject(SubabaseService);
+  private auth = inject(AuthService);
+  
+  favProperties = signal<string[]>([]);
+
+  
+  
 
   // Upload multiple images to 'properties' bucket
   uploadPropertyImages(files: File[]): Observable<string[]> {
@@ -48,6 +55,20 @@ export class PropertiesService {
         if (res.error) throw res.error;
         return res.data as Property[];
       }),
+    );
+  }
+  getFavProperties(){
+    return this.supabase.getById('fav_properties',this.auth.currentUser()?.auth.id!).pipe(
+      tap((res:any)=>{
+        if(res.error) throw res.error;
+        this.favProperties.set(res.data.properties_id as string[]);
+      }),
+    );
+  }
+
+  toggleFavProperty(propertyId:string){
+    return this.supabase.rpc('toggle_favorite', { p_property: propertyId }).pipe(
+      tap(() => this.getFavProperties().subscribe()),
     );
   }
 }

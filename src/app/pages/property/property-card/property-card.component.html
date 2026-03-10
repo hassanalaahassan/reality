@@ -121,7 +121,7 @@
       <!-- Price -->
       <div class="price-section animate-slide-up">
         <h3 class="price-text text-realty-blue-800">
-          {{ formatPrice(property.price) }}
+          {{ "EGP " + (property.price | number: "1.0-0") }}
         </h3>
         @if (getPricePerSquareMeter()) {
           <p class="price-per-meter text-realty-gray-500">

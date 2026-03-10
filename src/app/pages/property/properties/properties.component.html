@@ -9,12 +9,12 @@
     @if (isLoading()) {
       <!-- Skeletons -->
       @for (item of skeletonArray; track $index) {
-        <app-card [isLoading]="true" [property]="null!"></app-card>
+        <app-card [isLoading]="true" [property]="null!"/>
       }
     } @else {
       <!-- Real Data -->
       @for (prop of properties(); track prop.id) {
-        <app-card [property]="prop" [isLoading]="false"></app-card>
+        <app-card [property]="prop" [isFavorite]="checkPropertyFav(prop.id+'')" [isLoading]="false" (favoriteToggle)="onToggleFavorite($event)"/>
       }
 
       @if (properties().length === 0) {

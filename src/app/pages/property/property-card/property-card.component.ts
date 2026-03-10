@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Property } from '../../../Models/property';
@@ -14,10 +14,10 @@ export class CardComponent {
   @Input({ required: true }) property!: Property;
   @Input() isLoading = false;
 
-  @Output() favoriteToggle = new EventEmitter<number>();
+  @Output() favoriteToggle = new EventEmitter<string>();
   @Output() contactRequest = new EventEmitter<number>();
 
-  isFavorite = false;
+  @Input() isFavorite = false;
   isImageLoaded = false;
 
   getPropertyTypeColor(type: string | undefined): string {
@@ -58,10 +58,7 @@ export class CardComponent {
     return colors[statusLower] || 'bg-gray-100 text-gray-800';
   }
 
-  formatPrice(price: number | null): string {
-    if (price === null || price === undefined) return 'Price on Request';
-    return `EGP ${price.toLocaleString('en-EG')}`;
-  }
+  
 
   getPricePerSquareMeter(): number | null {
     if (!this.property.price || !this.property.area) return null;
@@ -75,7 +72,7 @@ export class CardComponent {
     event.stopPropagation();
     event.preventDefault(); // Prevent navigation
     this.isFavorite = !this.isFavorite;
-    this.favoriteToggle.emit(this.property.id);
+    this.favoriteToggle.emit(`${this.property.id}`);
   }
 
   // طلب التواصل

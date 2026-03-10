@@ -9,12 +9,12 @@ import {
 } from '../../../Services/validation.service';
 import { AuthService } from '../../../Services/auth.service';
 import { ToastService } from '../../../Services/toast.service';
-import { FormFieldComponent, AlertComponent } from '../../../Shared';
+import { FormFieldComponent } from '../../../Shared';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, FormFieldComponent, AlertComponent],
+  imports: [RouterLink, FormFieldComponent],
   templateUrl: './register.component.html',
 })
 export class RegisterComponent {
