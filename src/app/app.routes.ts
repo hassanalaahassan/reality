@@ -47,13 +47,7 @@ export const routes: Routes = [
             (c) => c.AboutComponent,
           ),
       },
-      {
-        path: 'fav-properties',
-        loadComponent: () =>
-          import('./pages/property/fav-properties/fav-properties.component').then(
-            (c) => c.FavPropertiesComponent,
-          ),
-      },
+      
     ],
   },
   {

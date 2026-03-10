@@ -1,7 +1,7 @@
 <div
   class="property-card group animate-fade-in"
   [class.loading]="isLoading"
-  [routerLink]="isLoading ? null : ['/properties', property.id]"
+  [routerLink]="isLoading ? null : ['/property-detail', property.id]"
 >
   @if (isLoading) {
     <!-- SKELETON LOADER -->
@@ -303,7 +303,7 @@
         </button>
 
         <button
-          [routerLink]="['/properties', property.id]"
+          [routerLink]="['/property-detail', property.id]"
           class="details-btn border-realty-blue-800 text-realty-blue-800 group-hover:bg-realty-blue-600 group-hover:border-realty-blue-600 group-hover:text-white"
         >
           View Details
