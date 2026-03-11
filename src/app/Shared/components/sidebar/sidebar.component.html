@@ -1,0 +1,180 @@
+<!-- Mobile Overlay -->
+<div
+  *ngIf="layoutService.isMobile() && layoutService.isSidebarExpanded()"
+  class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+  (click)="layoutService.closeMobileSidebar()"
+></div>
+
+<!-- Sidebar Container -->
+<aside
+  [class]="sidebarClasses"
+  [attr.aria-expanded]="!isCollapsed"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
+  <!-- Toggle Button -->
+  <button
+    (click)="toggleSidebar()"
+    class="ripple-btn absolute left-full top-6 z-[60] -translate-x-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-realty-terracotta-500 hover:bg-realty-terracotta-600 text-white shadow-lg transition-all duration-200 hover:scale-110 active:scale-95"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2.5"
+      stroke="currentColor"
+      class="w-3.5 h-3.5 transition-transform duration-300 ease-in-out"
+      [ngClass]="isCollapsed ? 'rotate-180' : 'rotate-0'"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5L8.25 12l7.5-7.5"
+      />
+    </svg>
+  </button>
+
+  <!-- Logo Section -->
+  <div class="mb-4 border-b border-realty-gray-200 pb-4">
+    <div class="flex items-center gap-3 px-4 pt-4">
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-realty-blue-500 flex-shrink-0"
+      >
+        <span class="text-xl font-bold text-white">🏠</span>
+      </div>
+      <!-- CSS transition instead of *ngIf -->
+      <div
+        class="sidebar-text overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out"
+        [ngClass]="
+          isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+        "
+      >
+        <h2 class="text-lg font-bold text-realty-blue-800">RealtyApp</h2>
+        <p class="text-[10px] text-realty-gray-500">Real Estate Solutions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="flex-1 space-y-1 px-3 overflow-y-auto">
+    <ng-container *ngFor="let item of menuItems()">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="bg-realty-blue-50 border-r-4 border-realty-blue-500 text-realty-blue-700 active-menu"
+        [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+        (click)="setActiveItem(item.id)"
+        [class]="getMenuItemClasses(item.id)"
+        [title]="isCollapsed ? item.label : ''"
+      >
+        <span class="text-xl flex-shrink-0">{{ item.icon }}</span>
+
+        <!-- CSS transition instead of *ngIf -->
+        <span
+          class="sidebar-text ms-3 whitespace-nowrap text-sm overflow-hidden transition-all duration-300 ease-in-out"
+          [ngClass]="
+            isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+          "
+        >
+          {{ item.label }}
+        </span>
+
+        <!-- Badge with CSS transition -->
+        <span
+          *ngIf="item.badge"
+          class="ml-auto rounded-full bg-realty-terracotta-100 px-2 py-0.5 text-[10px] font-medium text-realty-terracotta-700 whitespace-nowrap transition-all duration-300 ease-in-out"
+          [ngClass]="
+            isCollapsed
+              ? 'scale-0 w-0 opacity-0 overflow-hidden'
+              : 'scale-100 opacity-100'
+          "
+        >
+          {{ item.badge }}
+        </span>
+      </a>
+    </ng-container>
+  </nav>
+
+  <!-- VIP Section (CSS transition instead of *ngIf) -->
+  <div
+    class="mx-3 p-3 rounded-lg bg-gradient-to-r from-realty-sage-50 to-realty-cream-50 border border-realty-sage-200 flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden"
+    [ngClass]="
+      isCollapsed
+        ? 'max-h-0 opacity-0 m-0 p-0 border-0'
+        : 'max-h-40 opacity-100 mt-4'
+    "
+  >
+    <div class="flex items-center gap-2 mb-2">
+      <div
+        class="flex h-8 w-8 items-center justify-center rounded-full bg-realty-sage-500 flex-shrink-0"
+      >
+        <span class="text-white text-xs">⭐</span>
+      </div>
+      <div>
+        <h3 class="font-semibold text-sm text-realty-sage-800 leading-tight">
+          VIP offers
+        </h3>
+        <p class="text-[10px] text-realty-gray-600 leading-tight mt-0.5">
+          Exclusive discounts
+        </p>
+      </div>
+    </div>
+    <button
+      class="ripple-btn w-full bg-realty-sage-500 hover:bg-realty-sage-600 text-white text-[11px] font-medium py-1.5 rounded transition whitespace-nowrap"
+    >
+      show offers
+    </button>
+  </div>
+
+  <!-- Logout & User Profile -->
+  <div class="mt-auto border-t border-realty-gray-200 pt-2 pb-3 flex-shrink-0">
+    <!-- Logout Button -->
+    <div class="px-3 mb-1">
+      <button
+        (click)="logout()"
+        class="ripple-btn w-full flex items-center p-2 rounded-lg text-realty-terracotta-500 hover:bg-realty-terracotta-50 transition-all duration-300 cursor-pointer"
+        [title]="isCollapsed ? 'Log out' : ''"
+      >
+        <span class="text-xl flex-shrink-0">🚪</span>
+        <span
+          class="sidebar-text ms-3 font-medium text-sm whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out"
+          [ngClass]="
+            isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+          "
+        >
+          Log out
+        </span>
+      </button>
+    </div>
+
+    <!-- User Profile -->
+    <div
+      class="flex items-center gap-3 px-4 py-2 border-t border-realty-gray-100 mt-1 pt-2"
+    >
+      <img
+        [src]="
+          user()?.profile?.image_url ||
+          'https://api.dicebear.com/7.x/avataaars/svg?seed=Agent'
+        "
+        alt="Profile"
+        class="h-8 w-8 rounded-full border-2 border-realty-cream-300 object-cover flex-shrink-0 bg-white"
+      />
+      <div
+        class="sidebar-text overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out"
+        [ngClass]="
+          isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[180px] opacity-100'
+        "
+      >
+        <p
+          class="text-sm font-medium text-realty-blue-800 truncate leading-tight"
+        >
+          {{ user()?.profile?.fullName || "User" }}
+        </p>
+        <p
+          class="text-[10px] text-realty-gray-500 truncate leading-tight mt-0.5"
+        >
+          {{ user()?.auth?.email }}
+        </p>
+      </div>
+    </div>
+  </div>
+</aside>

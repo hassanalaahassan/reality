@@ -1,0 +1,570 @@
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes badgeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes btnPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(196, 92, 75, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(196, 92, 75, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(196, 92, 75, 0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out 0.2s both;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animate-badge-in {
+  animation: badgeIn 0.5s ease-out;
+}
+
+.animate-btn-pulse {
+  animation: btnPulse 2s infinite;
+}
+
+.property-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  cursor: pointer;
+  will-change: transform, box-shadow;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.property-card:active {
+  transform: translateY(-4px);
+  transition: transform 0.1s;
+}
+
+.card-image-container {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-image-container .image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-image-container .property-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.card-image-container .property-image.loaded {
+  opacity: 1;
+}
+
+.card-image-container .property-image:not(.loaded) {
+  opacity: 0;
+}
+
+.card-image-container .image-skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.card-image-container .image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+}
+
+.featured-badge {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #fbbf24, #f59e0b);
+  color: white;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.status-badge {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.favorite-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.favorite-btn:hover {
+  background: white;
+  transform: scale(1.1);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.favorite-btn.favorite-active {
+  background: rgba(254, 226, 226, 1);
+}
+
+.favorite-btn.favorite-active:hover {
+  background: rgba(254, 202, 202, 1);
+}
+
+.card-content {
+  padding: 20px;
+  flex: 1; /* يأخذ المساحة المتبقية */
+  display: flex;
+  flex-direction: column;
+  min-height: 330px; /* ارتفاع أدنى للمحتوى */
+}
+
+.price-section {
+  margin-bottom: 16px;
+}
+
+.price-section .price-text {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: #1a2b5f;
+  line-height: 1.2;
+}
+
+.price-section .price-per-meter {
+  font-size: 0.875rem;
+  color: #7c7873;
+  margin-top: 4px;
+}
+
+.title-section {
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.title-section .property-title {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 56px;
+  max-height: 56px;
+}
+
+.title-section .location-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7c7873;
+}
+
+.title-section .location-section .location-text {
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.details-section {
+  margin-bottom: 16px;
+  flex-shrink: 0;
+  min-height: 140px;
+}
+
+.details-section .property-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.details-section .property-type .type-icon {
+  font-size: 16px;
+}
+
+.details-section .property-type .type-text {
+  text-transform: capitalize;
+}
+
+.details-section .details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.details-section .details-grid .detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7c7873;
+}
+
+.details-section .details-grid .detail-item span {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.amenities-section {
+  margin-bottom: 16px;
+  flex: 1;
+  min-height: 60px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.amenities-section .amenities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.amenities-section .amenities-list .amenity-badge {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  background-color: #f5f0e6;
+  color: #7c7873;
+  border-radius: 9999px;
+  border: 1px solid #f7f2e4;
+}
+
+.amenities-section .amenities-list .amenity-more {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  color: #c45c4b;
+  font-weight: 500;
+}
+
+.amenities-section::-webkit-scrollbar {
+  width: 4px;
+}
+
+.amenities-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.amenities-section::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.amenities-section::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.actions-section {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.actions-section .contact-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background-color: #c45c4b;
+  color: white;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.actions-section .contact-btn:hover {
+  background-color: #a84d3f;
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(196, 92, 75, 0.3);
+}
+
+.actions-section .contact-btn:active {
+  transform: scale(0.98);
+}
+
+.actions-section .details-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border: 2px solid #1a2b5f;
+  color: #1a2b5f;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s;
+  background: transparent;
+  cursor: pointer;
+}
+
+.actions-section .details-btn:hover {
+  background-color: #1a2b5f;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .property-card-list {
+    flex-direction: column;
+    min-height: 500px;
+  }
+
+  .property-card-list .card-image-container {
+    flex: 0 0 200px;
+  }
+
+  .actions-section {
+    flex-direction: column;
+  }
+
+  .actions-section button {
+    width: 100%;
+  }
+
+  .details-section .details-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-content {
+    min-height: 300px;
+  }
+
+  .details-section {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 640px) {
+  .title-section .property-title {
+    min-height: auto !important;
+    max-height: none;
+  }
+
+  .price-section .price-text {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .property-card {
+    min-height: 450px;
+  }
+
+  .card-image-container {
+    height: 180px;
+  }
+}
+
+.group .property-image {
+  transition-delay: 0.1s;
+}
+
+.group:hover .property-image {
+  transform: scale(1.15);
+}
+
+.group:hover .details-btn svg {
+  transform: translateX(4px);
+}
+
+.property-card.loading .image-skeleton,
+.property-card.loading .text-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.property-card.loading .text-skeleton {
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.property-card.loading .text-skeleton:last-child {
+  width: 60%;
+}
+
+.property-type-apartment {
+  background-color: #e8f0fe;
+  color: #1e40af;
+}
+
+.property-type-villa {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.property-type-office {
+  background-color: #f3e8ff;
+  color: #6b21a8;
+}
+
+.property-type-land {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-for-sale {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-for-rent {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-sold {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.property-card {
+  width: 100%;
+}
+
+.card-content-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* للتعامل مع النصوص الطويلة */
+.truncate-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* لضمان أن الصور بنفس الحجم */
+.image-fixed {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}

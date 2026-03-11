@@ -1,0 +1,100 @@
+<!-- Header -->
+<div class="mb-8 text-center">
+  <h2 class="text-3xl font-bold text-realty-blue-500">Reality</h2>
+  <p class="text-realty-gray-600 mt-2">
+    Welcome back! Please enter your details
+  </p>
+</div>
+
+
+
+<!-- Form -->
+<form class="space-y-6">
+  <!-- Email -->
+  <app-form-field
+    label="Email"
+    fieldId="email"
+    type="email"
+    placeholder="Enter your email"
+    [value]="form().email"
+    [error]="errors().email"
+    [touched]="!!touched().email"
+    (valueChange)="update('email', $event)"
+    (fieldBlur)="markTouched('email')"
+  />
+
+  <!-- Password -->
+  <app-form-field
+    label="Password"
+    fieldId="password"
+    type="password"
+    placeholder="Enter your password"
+    [value]="form().password"
+    [error]="errors().password"
+    [touched]="!!touched().password"
+    (valueChange)="update('password', $event)"
+    (fieldBlur)="markTouched('password')"
+  />
+
+  <!-- Remember me & Forgot password -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+      <input
+        type="checkbox"
+        id="remember"
+        class="h-4 w-4 rounded border-realty-gray-300 text-realty-terracotta-500 focus:ring-realty-terracotta-500"
+      />
+      <label for="remember" class="ml-2 block text-sm text-realty-blue-800">
+        Remember me
+      </label>
+    </div>
+    <a
+      routerLink="/forget-password"
+      class="text-sm text-realty-terracotta-500 hover:underline"
+    >
+      Forgot password?
+    </a>
+  </div>
+
+  <!-- Submit button -->
+  <button
+    type="button"
+    (click)="onSubmit()"
+    class="w-full rounded-md bg-realty-terracotta-500 px-4 py-2 text-white hover:bg-realty-terracotta-600 focus:outline-none focus:ring-2 focus:ring-realty-terracotta-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+    [disabled]="loading() || !isFormValid()"
+  >
+    @if (loading()) {
+      <span class="inline-flex items-center gap-2">
+        <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          ></path>
+        </svg>
+        Logging in...
+      </span>
+    } @else {
+      Sign In
+    }
+  </button>
+
+  <!-- Register link -->
+  <p class="text-center text-sm text-realty-gray-600">
+    Don't have an account?
+    <a
+      routerLink="/register"
+      class="font-medium text-realty-terracotta-500 hover:underline"
+    >
+      Sign up
+    </a>
+  </p>
+</form>

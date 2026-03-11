@@ -1,0 +1,61 @@
+<nav class="bg-realty-blue-500 text-white shadow-md">
+  <div class="container mx-auto px-4 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <img
+          src="reality.jpg"
+          alt="Reality Sulgan"
+          class="h-8 rounded-md w-auto"
+        />
+        <span class="font-semibold text-lg hidden sm:inline">Reality</span>
+      </div>
+
+      <div class="hidden md:flex flex-1 justify-center space-x-6">
+        <a
+          routerLink="/login"
+          class="hover:text-realty-terracotta-300 transition duration-200"
+          >Login</a
+        >
+        <a
+          routerLink="/register"
+          class="hover:text-realty-terracotta-300 transition duration-200"
+          >Register</a
+        >
+      </div>
+      <button
+        class="md:hidden text-white focus:outline-none"
+        data-collapse-toggle="mobile-menu"
+        type="button"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="hidden md:hidden w-full" id="mobile-menu">
+      <div class="pt-2 pb-3 space-y-1">
+        <a
+          routerLink="/login"
+          class="block px-3 py-2 rounded-md hover:bg-realty-blue-600 hover:text-realty-terracotta-300"
+          >Login</a
+        >
+        <a
+          routerLink="/register"
+          class="block px-3 py-2 rounded-md hover:bg-realty-blue-600 hover:text-realty-terracotta-300"
+          >Register</a
+        >
+      </div>
+    </div>
+  </div>
+</nav>

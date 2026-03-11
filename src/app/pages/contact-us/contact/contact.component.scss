@@ -1,0 +1,41 @@
+/* Contact Page Styles */
+.contact-page {
+  min-height: calc(100vh - 80px); /* Adjust based on your header height */
+  background: linear-gradient(
+    180deg,
+    var(--realty-cream-50, #faf8f0) 0%,
+    #ffffff 40%
+  );
+}
+
+.contact-container {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--realty-cream-100, #f7f2e4);
+}
+
+.form-label {
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.form-control {
+  font-size: 1rem;
+  color: var(--realty-blue-800, #0e1a40);
+}
+
+.form-control::placeholder {
+  color: var(--realty-gray-400, #9ca3af);
+}
+
+/* Animations based on existing project styles */
+button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.hover\:-translate-y-1:hover {
+  transform: translateY(-2px);
+}

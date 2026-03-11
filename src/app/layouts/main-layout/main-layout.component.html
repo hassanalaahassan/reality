@@ -1,0 +1,15 @@
+<app-sidebar></app-sidebar>
+<main
+  class="min-h-screen transition-all duration-300 ease-in-out bg-realty-cream-500"
+  [ngClass]="
+    layoutService.isMobile()
+      ? 'ml-20'
+      : layoutService.isSidebarPinned()
+        ? 'ml-64'
+        : 'ml-20'
+  "
+>
+  <div class="h-full p-2 md:p-4">
+    <router-outlet></router-outlet>
+  </div>
+</main>
